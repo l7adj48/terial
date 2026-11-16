@@ -1,8 +1,16 @@
 'use strict';
 /* تحويل المشروع عند الدفع إلى موقع Jekyll + PWA على GitHub Pages.
    الملفات المولَّدة تُضاف للدفعة فقط (لا تظهر في ملفات المشروع)، ولا تُكتب فوق ملف موجود في المشروع أو المستودع. */
-const JK_A = '';
-function jkStrip(t) { return String(t).indexOf(JK_A) < 0 ? t : String(t).replace(/<!--CP-PWA-->[\s\S]*?<!--\/CP-PWA-->\n?/g, ''); }
+const JK_A = '<' + '!--CP-PWA-->', JK_B = '<' + '!--/CP-PWA-->';
+function jkStrip(t) {
+  let s = String(t);
+  for (;;) {
+    const a = s.indexOf(JK_A); if (a < 0) return s;
+    const b = s.indexOf(JK_B, a); if (b < 0) return s;
+    let e = b + JK_B.length; if (s[e] === '\n') e++;
+    s = s.slice(0, a) + s.slice(e);
+  }
+}
 function jkSiteUrl(repo) {
   const p = String(repo).split('/'), o = (p[0] || '').toLowerCase(), r = p[1] || '';
   return 'https://' + o + '.github.io' + (r.toLowerCase() === o + '.github.io' ? '/' : '/' + r + '/');
@@ -18,8 +26,8 @@ function jkInject(html, o) {
   if (o.icon && !/<link[^>]+rel=["'](?:shortcut )?icon["']/i.test(html)) head += '<link rel="icon" type="image/png" href="icon-192.png">';
   if (o.icon && !/<link[^>]+rel=["']apple-touch-icon["']/i.test(html)) head += '<link rel="apple-touch-icon" href="icon-192.png">';
   if (!/serviceWorker\s*\.\s*register/.test(html)) body = '<script>if("serviceWorker"in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>';
-  if (body) { const i = low.lastIndexOf('</body>'), blk = '<!--CP-PWA-->' + body + '<!--/CP-PWA-->' + '\n'; html = i >= 0 ? html.slice(0, i) + blk + html.slice(i) : html + '\n' + blk; }
-  if (head) { const i = low.indexOf('</head>'), blk = '<!--CP-PWA-->' + head + '<!--/CP-PWA-->' + '\n'; html = i >= 0 ? html.slice(0, i) + blk + html.slice(i) : blk + html; }
+  if (body) { const i = low.lastIndexOf('</body>'), blk = JK_A + body + JK_B + '\n'; html = i >= 0 ? html.slice(0, i) + blk + html.slice(i) : html + '\n' + blk; }
+  if (head) { const i = low.indexOf('</head>'), blk = JK_A + head + JK_B + '\n'; html = i >= 0 ? html.slice(0, i) + blk + html.slice(i) : blk + html; }
   return html;
 }
 function jkManifest(m) {
