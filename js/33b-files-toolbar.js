@@ -65,6 +65,7 @@
   closePop = function () { closeAll(); document.querySelectorAll('.dtb.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }); };
 
   function tbMenu(btn, items) {
+    const anchorRect = btn.getBoundingClientRect();
     closePop();
     btn.classList.add('open'); btn.setAttribute('aria-expanded', 'true');
     const back = document.createElement('div'); back.id = 'pback'; back.className = 'tb-back'; back.addEventListener('click', closePop);
@@ -78,7 +79,7 @@
       return '<div class="pi' + (it.cls ? ' ' + it.cls : '') + '" role="menuitem" tabindex="0" data-n="' + (fns.length - 1) + '">' + ic(it.i, it.i === 'github' ? 'brand' : '') + '<span class="pt"><b>' + esc(it.t) + '</b>' + (it.d ? '<small>' + esc(it.d) + '</small>' : '') + '</span></div>';
     }).join('');
     document.body.append(back, pop);
-    const r = btn.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    const r = anchorRect, w = pop.offsetWidth, h = pop.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
     const left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, vw - w - 8));
     let top = r.bottom + 6; if (top + h > vh - 8) top = Math.max(8, r.top - h - 6);
     pop.style.left = left + 'px'; pop.style.top = top + 'px';
