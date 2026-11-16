@@ -577,6 +577,11 @@ textarea.plain:focus,
 .pi-gh-manage { display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:32px; padding:0 9px; border:1px solid var(--border-default); border-radius:var(--radius-sm); background:var(--surface-control); color:var(--text-secondary); font:600 var(--text-xs) var(--font-sans); cursor:pointer; white-space:nowrap; transition:background var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast); }
 .pi-gh-manage:hover { background:var(--surface-hover); border-color:var(--border-strong); color:var(--text-primary); }
 .pi-gh-manage svg { width:13px; height:13px; }
+.pi-gh-submenu { display:flex; flex-direction:column; gap:3px; margin:2px 2px 7px; padding:5px; background:#fff; color:#202534; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 5px 16px rgba(15,23,42,.10); animation:tbIn var(--motion-fast) var(--ease-standard); }
+.pi-gh-submenu[hidden] { display:none; }
+.pi-gh-subitem { display:flex; align-items:center; gap:9px; width:100%; min-height:38px; padding:0 9px; border:0; border-radius:7px; background:transparent; color:#202534; text-align:start; font:600 13px var(--font-sans); cursor:pointer; }
+.pi-gh-subitem:hover, .pi-gh-subitem:focus-visible { background:#f1f3f7; outline:none; }
+.pi-gh-subitem svg { width:16px; height:16px; color:#667085; flex-shrink:0; }
 .pi-h { padding: 10px 12px; font: 700 13px var(--font-mono); color: var(--text-primary); background: var(--surface-control); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); direction: ltr; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 2px 2px 8px; }
 .pi-repo { padding: 11px 12px 10px; background: var(--surface-control); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); margin: 2px 2px 8px; direction: ltr; text-align: left; overflow: hidden; }
 .pi-repo-name { font: 700 15px var(--font-mono); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
