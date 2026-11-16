@@ -76,10 +76,10 @@ function ghTargetCard(c) {
 /* نافذة رسالة الـ commit مع إظهار المستودع الذي سيُدفع إليه. تعيد النص، أو null عند الإلغاء، أو { change, msg } عند طلب تغيير المستودع */
 function ghAskPush(c, def) {
   return new Promise(res => {
-    ui.show(ghHead('') + ghTargetCard(c) +
+    ui.show('<div class="gh-tight">' + ghHead('') + ghTargetCard(c) +
       uiRow('repos', 'folder-open', 'تغيير المستودع', 'اختر مستودعاً آخر للدفع إليه') +
       '<input type="text" id="uiIn" placeholder="رسالة الـ commit" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">' +
-      '<div class="srow"><button type="button" class="btn" data-ui="cancel">إلغاء</button><button type="button" class="btn primary" data-ui="ok">دفع</button></div>', act => { if (act === 'repos') ui.close({ change: true, msg: $('uiIn').value }); });
+      '<div class="srow"><button type="button" class="btn" data-ui="cancel">إلغاء</button><button type="button" class="btn primary" data-ui="ok">دفع</button></div></div>', act => { if (act === 'repos') ui.close({ change: true, msg: $('uiIn').value }); });
     ui.kind = 'prompt'; ui.resolve = res;
     const i = $('uiIn'); i.value = def || '';
     i.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); ui.close(i.value); } });
