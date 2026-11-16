@@ -17,7 +17,7 @@
         if (names.every(n => n === names[0]) && names[0]) return names[0];
       }
     } catch (_) {}
-    return 'مشروع CodePatcher';
+    return 'مشروع Terial';
   }
 
   function recentList() {
