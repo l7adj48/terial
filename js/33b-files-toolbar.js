@@ -5,27 +5,31 @@
   const needFiles = () => { if (!files.length) { toast('لا ملفات للتصدير', 'err'); return false; } return true; };
   const zipAs = mode => () => { if (needFiles()) exportZip(null, null, defZipName(), mode); };
 
+  function ghManageItems() {
+    const c = ghCfg(), linked = ghRepoOk(c.repo);
+    return [
+      { i: 'folder-open', t: linked ? 'تغيير المستودع' : 'اختيار مستودع', fn: () => githubDialog('pick') },
+      { i: 'plus', t: 'إنشاء مستودع جديد', fn: () => githubDialog('create') },
+      ...(linked ? [{ i: 'external', t: 'فتح المستودع على GitHub', fn: () => window.open('https://github.com/' + c.repo, '_blank', 'noopener') }] : []),
+      { sep: 1 },
+      { i: 'arrow-left', t: 'العودة إلى قائمة GitHub', fn: () => { const b = document.querySelector('[data-menu="github"]'); if (b) tbMenu(b, ghItems()); } }
+    ];
+  }
+
   function ghItems() {
     const raw = ghRaw(), c = ghCfg(), linked = !!raw.token && ghRepoOk(c.repo);
-
-    // من دون ربط الحساب: نعرض الربط والاستيراد العام فقط.
     if (!raw.token) return [
       { i: 'github', t: 'ربط حساب GitHub', d: 'للدفع وإدارة المستودعات', fn: () => githubDialog('connect') },
       { sep: 1 },
       { i: 'download-cloud', t: 'استيراد مشروع من GitHub', d: 'مستودع عام دون ربط الحساب', fn: () => ghImportDialog() }
     ];
-
-    // إبقاء قائمة GitHub مختصرة وبنفس أسلوب بقية قوائم الشريط.
     return [
+      { ghHead: 1 },
       { h: linked
           ? c.repo + ' · ' + c.branch + (c.dir ? ' · ' + c.dir : '')
           : 'حساب GitHub متصل' + (raw.login ? ' · ' + raw.login : '') },
       { i: 'upload-cloud', t: 'دفع التعديلات', d: linked ? 'رفع التغييرات في commit واحد' : 'اختر المستودع أولاً', fn: () => githubPush() },
       ...(linked ? [{ i: 'download-cloud', t: 'سحب آخر التحديثات', d: 'مراجعة قبل استبدال الملفات', fn: () => ghPull() }] : []),
-      { sep: 1 },
-      { i: 'folder-open', t: linked ? 'تغيير المستودع' : 'اختيار مستودع', fn: () => githubDialog('pick') },
-      { i: 'plus', t: 'إنشاء مستودع جديد', fn: () => githubDialog('create') },
-      ...(linked ? [{ i: 'external', t: 'فتح المستودع على GitHub', fn: () => window.open('https://github.com/' + c.repo, '_blank', 'noopener') }] : []),
       { sep: 1 },
       { i: 'import', t: 'استيراد مشروع من GitHub', d: 'مستودع عام أو خاص', fn: () => ghImportDialog() },
       { i: 'settings', t: 'إعدادات حساب GitHub', fn: () => githubDialog('set') }
@@ -68,6 +72,7 @@
     const fns = [];
     pop.innerHTML = items.map(it => {
       if (it.sep) return '<div class="psep"></div>';
+      if (it.ghHead) return '<div class="pi-gh-head"><span>' + ic('github', 'brand') + '<b>GitHub</b></span><button type="button" class="pi-gh-manage" data-gh-manage>إدارة المستودع' + ic('chev-left') + '</button></div>';
       if (it.h) return '<div class="pi-h" dir="auto">' + esc(it.h) + '</div>';
       fns.push(it.fn);
       return '<div class="pi' + (it.cls ? ' ' + it.cls : '') + '" role="menuitem" tabindex="0" data-n="' + (fns.length - 1) + '">' + ic(it.i, it.i === 'github' ? 'brand' : '') + '<span class="pt"><b>' + esc(it.t) + '</b>' + (it.d ? '<small>' + esc(it.d) + '</small>' : '') + '</span></div>';
@@ -79,6 +84,8 @@
     pop.style.left = left + 'px'; pop.style.top = top + 'px';
     pop.style.setProperty('--tb-origin', Math.round(r.left + r.width / 2 - left) + 'px');
     pop.addEventListener('click', e => {
+      const manage = e.target.closest('[data-gh-manage]');
+      if (manage) { tbMenu(manage, ghManageItems()); return; }
       const x = e.target.closest('[data-n]'); if (!x) return;
       const fn = fns[+x.dataset.n]; closePop(); if (fn) setTimeout(fn, 60);
     });
