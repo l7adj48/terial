@@ -106,6 +106,7 @@ function syncViewport() {
   else if (h > baseH) baseH = h;
   document.body.style.height = h + 'px';
   document.body.style.top = (vv ? vv.offsetTop : 0) + 'px';
+  document.documentElement.style.setProperty('--kb-pad', measuredOpen() ? '80px' : '0px');
   document.documentElement.style.setProperty('--vv-h', h + 'px');
   document.documentElement.style.setProperty('--vv-t', (vv ? vv.offsetTop : 0) + 'px');
   if (window.scrollY) window.scrollTo(0, 0);

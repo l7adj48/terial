@@ -231,6 +231,7 @@ textarea.plain:focus,
   padding: 0 var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom));
 }
 .modal.open { display: flex; }
+html .modal.open .sheet { margin-bottom: var(--kb-pad, 0px); max-height: min(calc(100% - var(--kb-pad, 0px)), 780px); }
 .modal.open { top: var(--vv-t, 0px); bottom: auto; height: var(--vv-h, 100%); }
 .modal.open .sheet { max-height: min(100%, 780px); }
 
