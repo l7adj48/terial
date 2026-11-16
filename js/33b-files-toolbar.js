@@ -102,9 +102,10 @@
           }).join('');
           const sr = manageSub.getBoundingClientRect();
           const pr = pop.getBoundingClientRect();
-          const left = Math.max(8, Math.min(manage.getBoundingClientRect().left + manage.offsetWidth / 2 - sr.width / 2, window.innerWidth - sr.width - 8));
+          const mr = manage.getBoundingClientRect();
+          const left = Math.max(8, Math.min(mr.left + mr.width / 2 - sr.width / 2, window.innerWidth - sr.width - 8));
           manageSub.style.left = left + 'px';
-          manageSub.style.top = (pr.bottom + 6) + 'px';
+          manageSub.style.top = (mr.bottom + 5) + 'px';
         }
         return;
       }
