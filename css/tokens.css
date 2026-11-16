@@ -1,0 +1,252 @@
+/* ==========================================================================
+   CodePatcher Design System — 1. Tokens (ملف التحكم المركزي #1: المقاسات والتنسيق)
+   عدّل هذا الملف لتغيير: الخطوط، كثافة الواجهة، ارتفاع الأزرار والحقول،
+   استدارة الحواف، المسافات، أبعاد مستكشف الملفات، أو لون التمييز الافتراضي.
+   ========================================================================== */
+
+:root {
+  /* ── الألوان الأساسية والهوية الافتراضية (Obsidian Sapphire) ── */
+  --color-primary: #4f8df9;
+  --color-primary-hover: #6fa3ff;
+  --color-primary-strong: #326ee0;
+  --color-primary-soft: rgba(79, 141, 249, 0.14);
+
+  --color-secondary: #6366f1;
+  --color-accent: #38bdf8;
+  --color-accent-soft: rgba(56, 189, 248, 0.12);
+
+  --text-on-semantic: #ffffff;
+
+  /* ── حالات دلالية ── */
+  --color-success: #34d399;
+  --color-success-solid: #15805d;
+  --color-success-bg: rgba(52, 211, 153, 0.13);
+
+  --color-warning: #f5b942;
+  --color-warning-bg: rgba(245, 185, 66, 0.14);
+
+  --color-danger: #f87171;
+  --color-danger-solid: #dc2626;
+  --color-danger-bg: rgba(248, 113, 113, 0.13);
+
+  --color-info: #38bdf8;
+  --color-info-bg: rgba(56, 189, 248, 0.12);
+
+  /* ── الخطوط والأحجام ── */
+  --font-ui: 'IBM Plex Sans Arabic', system-ui, 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Roboto Mono', monospace;
+  --fs: 14px;
+  --lh: 24px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13.5px;
+  --text-lg: 15.5px;
+  --text-xl: 21px;
+
+  /* ── المسافات والكثافة الافتراضية (Normal) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --row-min-h: 48px;
+  --sheet-pad-x: 16px;
+  --sheet-gap: 12px;
+
+  /* ── استدارة الحواف المعمارية (Tailored Round) ── */
+  --radius-xs: 5px;
+  --radius-sm: 7px;
+  --radius-button: 9px;
+  --radius-input: 9px;
+  --radius-card: 12px;
+  --radius-sheet: 18px;
+  --radius-pill: 999px;
+
+  /* ── أبعاد عناصر التحكم والهيكل ── */
+  --button-height: 44px;
+  --button-height-sm: 34px;
+  --input-height: 44px;
+  --touch-target: 44px;
+  --header-height: 54px;
+  --tabbar-height: 40px;
+  --nav-height: 60px;
+  --status-height: 28px;
+  --bottom-bar-height: 50px;
+  --dw: min(90vw, 390px);
+  --sheet-scroll-sm: 26vh;
+  --sheet-scroll-md: 50vh;
+  --sheet-scroll-lg: 58vh;
+
+  /* ── الحركة والتركيز والطبقات ── */
+  --motion-fast: 140ms;
+  --motion-standard: 190ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --focus-ring: 0 0 0 2px var(--color-primary-hover);
+  --blur-chrome: 16px;
+  --blur-modal: 8px;
+
+  --z-header: 10;
+  --z-nav: 30;
+  --z-con: 70;
+  --z-fab: 80;
+  --z-fullscreen: 200;
+  --z-drawer-back: 2900;
+  --z-drawer: 3000;
+  --z-pop-back: 3999;
+  --z-pop: 4000;
+  --z-modal: 5000;
+  --z-toast: 99999;
+}
+
+/* ── أوضاع الكثافة (Density Presets) ── */
+body[data-density="compact"] {
+  --space-2: 6px;
+  --space-3: 9px;
+  --space-4: 12px;
+  --space-5: 15px;
+  --button-height: 38px;
+  --button-height-sm: 30px;
+  --input-height: 38px;
+  --row-min-h: 42px;
+  --sheet-pad-x: 13px;
+  --sheet-gap: 9px;
+}
+
+body[data-density="spacious"] {
+  --space-2: 10px;
+  --space-3: 14px;
+  --space-4: 18px;
+  --space-5: 22px;
+  --button-height: 48px;
+  --button-height-sm: 38px;
+  --input-height: 48px;
+  --row-min-h: 54px;
+  --sheet-pad-x: 20px;
+  --sheet-gap: 14px;
+}
+
+/* ── أوضاع استدارة الحواف (Corner Radius Presets) ── */
+body[data-radius="sharp"] {
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-button: 5px;
+  --radius-input: 5px;
+  --radius-card: 7px;
+  --radius-sheet: 12px;
+}
+
+body[data-radius="soft"] {
+  --radius-xs: 7px;
+  --radius-sm: 11px;
+  --radius-button: 14px;
+  --radius-input: 14px;
+  --radius-card: 18px;
+  --radius-sheet: 24px;
+}
+
+/* ── ألوان التمييز المخصصة (Accent Color Presets — تتغلب على ألوان الثيم النشط تلقائياً) ── */
+html body[data-accent="gold"] {
+  --color-primary: #c99746;
+  --color-primary-hover: #e2b86d;
+  --color-primary-strong: #a6782e;
+  --color-primary-soft: rgba(201, 151, 70, 0.16);
+  --color-accent: #f0cf8e;
+  --color-accent-soft: rgba(240, 207, 142, 0.14);
+  --border-strong: rgba(226, 184, 109, 0.42);
+  --border-focus: rgba(226, 184, 109, 0.85);
+}
+
+html body[data-accent="indigo"] {
+  --color-primary: #6366f1;
+  --color-primary-hover: #818cf8;
+  --color-primary-strong: #4f46e5;
+  --color-primary-soft: rgba(99, 102, 241, 0.16);
+  --border-strong: rgba(129, 140, 248, 0.42);
+  --border-focus: rgba(129, 140, 248, 0.85);
+}
+
+html body[data-accent="cyan"] {
+  --color-primary: #0ea5e9;
+  --color-primary-hover: #38bdf8;
+  --color-primary-strong: #0284c7;
+  --color-primary-soft: rgba(14, 165, 233, 0.16);
+  --color-accent: #2dd4bf;
+  --border-strong: rgba(56, 189, 248, 0.42);
+  --border-focus: rgba(56, 189, 248, 0.85);
+}
+
+html body[data-accent="emerald"] {
+  --color-primary: #10b981;
+  --color-primary-hover: #34d399;
+  --color-primary-strong: #059669;
+  --color-primary-soft: rgba(16, 185, 129, 0.16);
+  --color-accent: #2dd4bf;
+  --border-strong: rgba(52, 211, 153, 0.42);
+  --border-focus: rgba(52, 211, 153, 0.85);
+}
+
+html body[data-accent="amber"] {
+  --color-primary: #d97706;
+  --color-primary-hover: #f59e0b;
+  --color-primary-strong: #b45309;
+  --color-primary-soft: rgba(217, 119, 6, 0.16);
+  --color-accent: #fbbf24;
+  --border-strong: rgba(245, 158, 11, 0.42);
+  --border-focus: rgba(245, 158, 11, 0.85);
+}
+
+html body[data-accent="rose"] {
+  --color-primary: #e11d48;
+  --color-primary-hover: #fb7185;
+  --color-primary-strong: #be123c;
+  --color-primary-soft: rgba(225, 29, 72, 0.16);
+  --color-accent: #fda4af;
+  --border-strong: rgba(251, 113, 133, 0.42);
+  --border-focus: rgba(251, 113, 133, 0.85);
+}
+
+/* ── تباين ألوان التمييز مع الثيمات الفاتحة ── */
+html body.light[data-accent="gold"],
+html body[data-theme="paper"][data-accent="gold"] {
+  --color-primary: #9a6b16;
+  --color-primary-hover: #7c540e;
+  --color-primary-strong: #6b4709;
+  --color-primary-soft: rgba(154, 107, 22, 0.13);
+  --color-accent: #9a6b16;
+  --color-accent-soft: rgba(154, 107, 22, 0.12);
+}
+html body.light[data-accent="indigo"],
+html body[data-theme="paper"][data-accent="indigo"] {
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-strong: #3730a3;
+}
+html body.light[data-accent="cyan"],
+html body[data-theme="paper"][data-accent="cyan"] {
+  --color-primary: #0284c7;
+  --color-primary-hover: #0369a1;
+  --color-primary-strong: #075985;
+  --color-accent: #0f766e;
+}
+html body.light[data-accent="emerald"],
+html body[data-theme="paper"][data-accent="emerald"] {
+  --color-primary: #059669;
+  --color-primary-hover: #047857;
+  --color-primary-strong: #065f46;
+  --color-accent: #047857;
+}
+html body.light[data-accent="amber"],
+html body[data-theme="paper"][data-accent="amber"] {
+  --color-primary: #b45309;
+  --color-primary-hover: #92400e;
+  --color-primary-strong: #78350f;
+  --color-accent: #92400e;
+}
+html body.light[data-accent="rose"],
+html body[data-theme="paper"][data-accent="rose"] {
+  --color-primary: #be123c;
+  --color-primary-hover: #9f1239;
+  --color-primary-strong: #881337;
+  --color-accent: #be123c;
+}

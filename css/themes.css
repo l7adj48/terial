@@ -1,0 +1,541 @@
+/* ==========================================================================
+   CodePatcher Design System — 2. Themes (ملف التحكم المركزي #2: الثيمات والألوان)
+   تبديل وإضافة أي ثيم من مكان واحد دون المساس بتنسيقات الشاشات أو منطق JS.
+   الثيمات المتاحة:
+     dark     — أوبسيديان استوديو (الافتراضي، رمادي داكن مصقول + ياقوتي أزرق)
+     royal    — ملكي ذهبي (أونيكس مطفي + ذهب شامبانيا وعاج دافئ)
+     light    — خزفي نقي (نهاري أبيض مصقول + كحلي عميق)
+     ocean    — أعماق المحيط (تيل داكن + سماوي نقي)
+     paper    — ورقي دافئ (قراءة مريحة بنمط الكتب)
+     contrast — تباين عالٍ (أقصى وضوح بصري)
+   ========================================================================== */
+
+:root,
+body[data-theme="dark"] {
+  color-scheme: dark;
+  /* ── أسطح استوديو أوبسيديان (محايدة عالية النقاء) ── */
+  --surface-app: #090b10;
+  --surface-app-glow-a: rgba(79, 141, 249, 0.08);
+  --surface-app-glow-b: rgba(56, 189, 248, 0.05);
+  --surface-header: rgba(11, 14, 21, 0.88);
+  --surface-panel: #0e1118;
+  --surface-panel-elevated: #131722;
+  --surface-card: #121620;
+  --surface-card-flat: #0f131c;
+  --surface-input: #080a0f;
+  --surface-modal: #121621;
+  --surface-backdrop: rgba(3, 5, 10, 0.72);
+  --surface-drawer: #0c0f16;
+  --surface-drawer-head: rgba(12, 15, 22, 0.92);
+  --surface-editor: #080a0f;
+  --surface-gutter: #0b0e15;
+  --surface-code: #0a0d14;
+  --surface-control: #171c29;
+  --surface-control-flat: #141925;
+  --surface-hover: rgba(148, 163, 184, 0.08);
+  --surface-active: rgba(79, 141, 249, 0.14);
+  --surface-hero: radial-gradient(circle at 85% 10%, rgba(79, 141, 249, 0.14), transparent 55%), linear-gradient(150deg, #131824 0%, #0d111a 100%);
+  --surface-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+
+  /* ── النصوص ── */
+  --text-primary: #eef1f7;
+  --text-secondary: #bcc5d6;
+  --text-muted: #8490a7;
+  --text-on-primary: #ffffff;
+  --text-on-accent: #04131c;
+
+  /* ── الحدود والظلال ── */
+  --border-subtle: rgba(226, 232, 240, 0.075);
+  --border-default: rgba(226, 232, 240, 0.13);
+  --border-strong: rgba(111, 163, 255, 0.36);
+  --border-focus: rgba(111, 163, 255, 0.78);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.42);
+  --shadow-lg: 0 22px 54px rgba(0, 0, 0, 0.6);
+  --shadow-primary: 0 4px 14px rgba(50, 110, 224, 0.28);
+
+  /* ── المحرر والاختيارات ── */
+  --caret-color: #6fa3ff;
+  --editor-selection: rgba(79, 141, 249, 0.32);
+  --editor-line-cur: rgba(255, 255, 255, 0.032);
+  --match-bg: rgba(56, 189, 248, 0.24);
+  --match-bad-bg: rgba(248, 113, 113, 0.42);
+  --diff-add-bg: rgba(52, 211, 153, 0.12);
+  --diff-add-fg: #6ee7b7;
+  --diff-del-bg: rgba(248, 113, 113, 0.12);
+  --diff-del-fg: #fca5a5;
+
+  /* ── ألوان التلوين البرمجي ── */
+  --syn-comment: #6b7b6e;
+  --syn-string: #df9a7e;
+  --syn-number: #b5d5a7;
+  --syn-keyword: #c792ea;
+  --syn-builtin: #4fd1c5;
+  --syn-fn: #e5dc9f;
+  --syn-prop: #89ddff;
+  --syn-tag: #6cb6ff;
+  --syn-attr: #96d0ff;
+  --syn-class: #4fd1c5;
+  --syn-regex: #e06c75;
+  --syn-punct: #c8d1e0;
+
+  /* ── ألوان أيقونات الملفات ── */
+  --fi-js: #f0c954;
+  --fi-js-bg: rgba(240, 201, 84, 0.11);
+  --fi-html: #fb9263;
+  --fi-html-bg: rgba(251, 146, 99, 0.11);
+  --fi-css: #60c5ff;
+  --fi-css-bg: rgba(96, 197, 255, 0.11);
+  --fi-json: #a8e06c;
+  --fi-json-bg: rgba(168, 224, 108, 0.11);
+  --fi-md: #82abff;
+  --fi-md-bg: rgba(130, 171, 255, 0.11);
+  --fi-img: #cc9cff;
+  --fi-img-bg: rgba(204, 156, 255, 0.11);
+  --fi-txt: #94a1b8;
+  --fi-txt-bg: rgba(148, 161, 184, 0.1);
+  --fi-dir: #e8be67;
+  --fi-dir-bg: rgba(232, 190, 103, 0.12);
+
+  /* ── جسر المتغيرات القديمة لضمان التوافق التام ومنع أي تسرب لوني ── */
+  --bg: var(--surface-app);
+  --panel: var(--surface-panel);
+  --panel2: var(--surface-panel-elevated);
+  --border: var(--border-default);
+  --text: var(--text-primary);
+  --muted: var(--text-muted);
+  --accent: var(--color-primary);
+  --ok: var(--color-success);
+  --ok-solid: var(--color-success-solid);
+  --ok-bg: var(--color-success-bg);
+  --warn: var(--color-warning);
+  --warn-bg: var(--color-warning-bg);
+  --err: var(--color-danger);
+  --err-bg: var(--color-danger-bg);
+  --purple: var(--color-primary-hover);
+  --cyan: var(--color-accent);
+  --hover: var(--surface-hover);
+  --mono: var(--font-mono);
+  --ui: var(--font-ui);
+  --r1: var(--radius-xs);
+  --r2: var(--radius-sm);
+  --r3: var(--radius-card);
+  --cp-bg: var(--surface-app);
+  --cp-panel: var(--surface-panel);
+  --cp-panel2: var(--surface-panel-elevated);
+  --cp-border: var(--border-default);
+  --cp-violet: var(--color-primary);
+  --cp-violet2: var(--color-primary-hover);
+  --cp-cyan: var(--color-accent);
+  --cp-line: var(--border-subtle);
+  --cp-muted: var(--text-muted);
+}
+
+/* ==========================================================================
+   الثيم الملكي الذهبي (Obsidian & Champagne Gold Theme)
+   ========================================================================== */
+body[data-theme="royal"] {
+  color-scheme: dark;
+  --color-primary: #c99746;
+  --color-primary-hover: #e2b86d;
+  --color-primary-strong: #a37429;
+  --color-primary-soft: rgba(201, 151, 70, 0.15);
+  --color-secondary: #8c6d3f;
+  --color-accent: #f0cf8e;
+  --color-accent-soft: rgba(240, 207, 142, 0.13);
+
+  --surface-app: #08080a;
+  --surface-app-glow-a: rgba(201, 151, 70, 0.08);
+  --surface-app-glow-b: rgba(240, 207, 142, 0.04);
+  --surface-header: rgba(12, 12, 15, 0.9);
+  --surface-panel: #101014;
+  --surface-panel-elevated: #16161c;
+  --surface-card: #131318;
+  --surface-card-flat: #101014;
+  --surface-input: #070709;
+  --surface-modal: #131318;
+  --surface-backdrop: rgba(3, 3, 5, 0.78);
+  --surface-drawer: #0c0c10;
+  --surface-drawer-head: rgba(12, 12, 16, 0.94);
+  --surface-editor: #070709;
+  --surface-gutter: #0b0b0e;
+  --surface-code: #0a0a0d;
+  --surface-control: #191920;
+  --surface-control-flat: #15151b;
+  --surface-hover: rgba(226, 184, 109, 0.08);
+  --surface-active: rgba(201, 151, 70, 0.15);
+  --surface-hero: radial-gradient(circle at 88% 12%, rgba(226, 184, 109, 0.16), transparent 55%), linear-gradient(150deg, #171512 0%, #0e0d0c 100%);
+  --surface-sheen: inset 0 1px 0 rgba(255, 236, 195, 0.055);
+
+  --text-primary: #f7f4ee;
+  --text-secondary: #d3ccbe;
+  --text-muted: #989184;
+  --text-on-primary: #140f05;
+  --text-on-accent: #140f05;
+
+  --border-subtle: rgba(240, 215, 165, 0.09);
+  --border-default: rgba(240, 215, 165, 0.16);
+  --border-strong: rgba(226, 184, 109, 0.42);
+  --border-focus: rgba(240, 207, 142, 0.85);
+  --shadow-primary: 0 4px 16px rgba(163, 116, 41, 0.28);
+
+  --caret-color: #f0cf8e;
+  --editor-selection: rgba(201, 151, 70, 0.34);
+  --editor-line-cur: rgba(240, 207, 142, 0.04);
+  --match-bg: rgba(240, 207, 142, 0.24);
+}
+
+/* ==========================================================================
+   الثيم الفاتح الخزفي (Porcelain Light Studio)
+   ========================================================================== */
+body.light,
+body[data-theme="light"] {
+  color-scheme: light;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-strong: #1e40af;
+  --color-primary-soft: rgba(37, 99, 235, 0.1);
+
+  --color-secondary: #4338ca;
+  --color-accent: #0284c7;
+  --color-accent-soft: rgba(2, 132, 199, 0.1);
+
+  --color-success: #15803d;
+  --color-success-solid: #166534;
+  --color-success-bg: rgba(21, 128, 61, 0.1);
+  --color-warning: #b45309;
+  --color-warning-bg: rgba(217, 119, 6, 0.11);
+  --color-danger: #be123c;
+  --color-danger-solid: #9f1239;
+  --color-danger-bg: rgba(190, 18, 60, 0.1);
+  --color-info: #0369a1;
+  --color-info-bg: rgba(3, 105, 161, 0.1);
+
+  --surface-app: #f4f5f8;
+  --surface-app-glow-a: rgba(37, 99, 235, 0.04);
+  --surface-app-glow-b: rgba(15, 23, 42, 0.03);
+  --surface-header: rgba(255, 255, 255, 0.9);
+  --surface-panel: #ffffff;
+  --surface-panel-elevated: #eceff5;
+  --surface-card: #ffffff;
+  --surface-card-flat: #f8f9fc;
+  --surface-input: #ffffff;
+  --surface-modal: #ffffff;
+  --surface-backdrop: rgba(15, 23, 42, 0.36);
+  --surface-drawer: #fafbfd;
+  --surface-drawer-head: rgba(255, 255, 255, 0.92);
+  --surface-editor: #ffffff;
+  --surface-gutter: #f8f9fc;
+  --surface-code: #f5f7fb;
+  --surface-control: #f4f6fa;
+  --surface-control-flat: #eef1f6;
+  --surface-hover: rgba(15, 23, 42, 0.045);
+  --surface-active: rgba(37, 99, 235, 0.09);
+  --surface-hero: radial-gradient(circle at 85% 10%, rgba(37, 99, 235, 0.09), transparent 55%), linear-gradient(150deg, #ffffff 0%, #f1f4fa 100%);
+  --surface-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-on-primary: #ffffff;
+  --text-on-accent: #ffffff;
+
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-default: rgba(15, 23, 42, 0.14);
+  --border-strong: rgba(37, 99, 235, 0.34);
+  --border-focus: rgba(37, 99, 235, 0.72);
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.09);
+  --shadow-lg: 0 18px 44px rgba(15, 23, 42, 0.15);
+  --shadow-primary: 0 4px 12px rgba(37, 99, 235, 0.2);
+
+  --caret-color: #111827;
+  --editor-selection: rgba(37, 99, 235, 0.2);
+  --editor-line-cur: rgba(37, 99, 235, 0.04);
+  --match-bg: rgba(2, 132, 199, 0.2);
+  --match-bad-bg: rgba(190, 18, 60, 0.24);
+  --diff-add-bg: rgba(21, 128, 61, 0.11);
+  --diff-add-fg: #15803d;
+  --diff-del-bg: rgba(190, 18, 60, 0.11);
+  --diff-del-fg: #be123c;
+
+  --syn-comment: #047857;
+  --syn-string: #b91c1c;
+  --syn-number: #0f766e;
+  --syn-keyword: #7e22ce;
+  --syn-builtin: #0369a1;
+  --syn-fn: #854d0e;
+  --syn-prop: #1e3a8a;
+  --syn-tag: #991b1b;
+  --syn-attr: #c2410c;
+  --syn-class: #0369a1;
+  --syn-regex: #9f1239;
+  --syn-punct: #475569;
+
+  --fi-js: #b58900;
+  --fi-js-bg: rgba(181, 137, 0, 0.11);
+  --fi-html: #d9480f;
+  --fi-html-bg: rgba(217, 72, 15, 0.1);
+  --fi-css: #0284c7;
+  --fi-css-bg: rgba(2, 132, 199, 0.1);
+  --fi-json: #4d7c0f;
+  --fi-json-bg: rgba(77, 124, 15, 0.1);
+  --fi-md: #2563eb;
+  --fi-md-bg: rgba(37, 99, 235, 0.1);
+  --fi-img: #9333ea;
+  --fi-img-bg: rgba(147, 51, 234, 0.1);
+  --fi-txt: #64748b;
+  --fi-txt-bg: rgba(100, 116, 139, 0.1);
+  --fi-dir: #b7791f;
+  --fi-dir-bg: rgba(183, 121, 31, 0.11);
+}
+
+/* ==========================================================================
+   الثيم المحيطي (Abyssal Ocean Theme)
+   ========================================================================== */
+body[data-theme="ocean"] {
+  color-scheme: dark;
+  --color-primary: #0ea5e9;
+  --color-primary-hover: #38bdf8;
+  --color-primary-strong: #0284c7;
+  --color-primary-soft: rgba(14, 165, 233, 0.15);
+  --color-secondary: #14b8a6;
+  --color-accent: #2dd4bf;
+  --color-accent-soft: rgba(45, 212, 191, 0.13);
+
+  --surface-app: #061117;
+  --surface-app-glow-a: rgba(14, 165, 233, 0.1);
+  --surface-app-glow-b: rgba(20, 184, 166, 0.08);
+  --surface-header: rgba(7, 20, 27, 0.9);
+  --surface-panel: #0a1922;
+  --surface-panel-elevated: #0f2430;
+  --surface-card: #0d202b;
+  --surface-card-flat: #0a1b25;
+  --surface-input: #06131b;
+  --surface-modal: #0d212d;
+  --surface-drawer: #08161f;
+  --surface-drawer-head: rgba(6, 19, 26, 0.9);
+  --surface-editor: #061219;
+  --surface-gutter: #091a24;
+  --surface-code: #081720;
+  --surface-control: #122a38;
+  --surface-control-flat: #102532;
+  --surface-hover: rgba(45, 212, 191, 0.09);
+  --surface-active: rgba(14, 165, 233, 0.16);
+  --surface-hero: radial-gradient(circle at 86% 12%, rgba(45, 212, 191, 0.15), transparent 55%), linear-gradient(150deg, #0d2533 0%, #071620 100%);
+  --surface-sheen: inset 0 1px 0 rgba(125, 211, 252, 0.06);
+
+  --border-subtle: rgba(125, 195, 220, 0.12);
+  --border-default: rgba(125, 195, 220, 0.2);
+  --border-strong: rgba(56, 189, 248, 0.4);
+  --border-focus: rgba(45, 212, 191, 0.8);
+  --shadow-primary: 0 4px 16px rgba(14, 165, 233, 0.25);
+}
+
+/* ==========================================================================
+   الثيم الورقي الدافئ (Warm Paper Light Theme)
+   ========================================================================== */
+body[data-theme="paper"] {
+  color-scheme: light;
+  --color-primary: #3653b3;
+  --color-primary-hover: #284299;
+  --color-primary-strong: #1e3a8a;
+  --color-primary-soft: rgba(54, 83, 179, 0.11);
+
+  --color-secondary: #0f766e;
+  --color-accent: #b45309;
+  --color-accent-soft: rgba(180, 83, 9, 0.1);
+
+  --color-success: #15803d;
+  --color-success-solid: #166534;
+  --color-success-bg: rgba(21, 128, 61, 0.1);
+  --color-warning: #b45309;
+  --color-warning-bg: rgba(180, 83, 9, 0.11);
+  --color-danger: #b91c1c;
+  --color-danger-solid: #991b1b;
+  --color-danger-bg: rgba(185, 28, 28, 0.1);
+  --color-info: #0f766e;
+  --color-info-bg: rgba(15, 118, 110, 0.1);
+
+  --surface-app: #f3ede2;
+  --surface-app-glow-a: rgba(180, 83, 9, 0.04);
+  --surface-app-glow-b: rgba(54, 83, 179, 0.04);
+  --surface-header: rgba(250, 246, 238, 0.92);
+  --surface-panel: #faf6ee;
+  --surface-panel-elevated: #ece4d6;
+  --surface-card: #fcf9f2;
+  --surface-card-flat: #f6f0e5;
+  --surface-input: #fffdf8;
+  --surface-modal: #fcf9f2;
+  --surface-backdrop: rgba(41, 32, 20, 0.38);
+  --surface-drawer: #f8f3ea;
+  --surface-drawer-head: rgba(250, 246, 238, 0.92);
+  --surface-editor: #fffdf8;
+  --surface-gutter: #f5efe4;
+  --surface-code: #f4ede1;
+  --surface-control: #f2eadc;
+  --surface-control-flat: #ece3d4;
+  --surface-hover: rgba(54, 83, 179, 0.07);
+  --surface-active: rgba(54, 83, 179, 0.12);
+  --surface-hero: radial-gradient(circle at 86% 10%, rgba(180, 83, 9, 0.08), transparent 55%), linear-gradient(150deg, #fcf9f2 0%, #efe7d8 100%);
+  --surface-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  --text-primary: #292218;
+  --text-secondary: #4a4033;
+  --text-muted: #786c5c;
+  --text-on-primary: #ffffff;
+  --text-on-accent: #ffffff;
+
+  --border-subtle: rgba(74, 64, 51, 0.11);
+  --border-default: rgba(74, 64, 51, 0.18);
+  --border-strong: rgba(54, 83, 179, 0.34);
+  --border-focus: rgba(54, 83, 179, 0.72);
+
+  --shadow-sm: 0 2px 8px rgba(41, 32, 20, 0.06);
+  --shadow-md: 0 10px 24px rgba(41, 32, 20, 0.1);
+  --shadow-lg: 0 18px 42px rgba(41, 32, 20, 0.15);
+  --shadow-primary: 0 4px 12px rgba(54, 83, 179, 0.18);
+
+  --caret-color: #292218;
+  --editor-selection: rgba(54, 83, 179, 0.2);
+  --editor-line-cur: rgba(180, 83, 9, 0.05);
+  --match-bg: rgba(180, 83, 9, 0.18);
+  --match-bad-bg: rgba(185, 28, 28, 0.22);
+  --diff-add-bg: rgba(21, 128, 61, 0.1);
+  --diff-add-fg: #15803d;
+  --diff-del-bg: rgba(185, 28, 28, 0.1);
+  --diff-del-fg: #b91c1c;
+
+  --syn-comment: #5b7b43;
+  --syn-string: #a6341b;
+  --syn-number: #0c7461;
+  --syn-keyword: #7c3aed;
+  --syn-builtin: #0f766e;
+  --syn-fn: #854d0e;
+  --syn-prop: #1e40af;
+  --syn-tag: #9a3412;
+  --syn-attr: #c2410c;
+  --syn-class: #0f766e;
+  --syn-regex: #9f1239;
+  --syn-punct: #44403c;
+}
+
+/* ==========================================================================
+   ثيم عالي التباين (High Contrast Theme)
+   ========================================================================== */
+body[data-theme="contrast"] {
+  color-scheme: dark;
+  --color-primary: #38bdf8;
+  --color-primary-hover: #7dd3fc;
+  --color-primary-strong: #0284c7;
+  --color-primary-soft: rgba(56, 189, 248, 0.2);
+  --color-secondary: #fde047;
+  --color-accent: #fde047;
+  --color-accent-soft: rgba(253, 224, 71, 0.16);
+
+  --color-success: #4ade80;
+  --color-success-solid: #15803d;
+  --color-success-bg: rgba(74, 222, 128, 0.18);
+  --color-warning: #facc15;
+  --color-warning-bg: rgba(250, 204, 21, 0.18);
+  --color-danger: #fb7185;
+  --color-danger-solid: #e11d48;
+  --color-danger-bg: rgba(251, 113, 133, 0.18);
+  --color-info: #7dd3fc;
+  --color-info-bg: rgba(125, 211, 252, 0.16);
+
+  --surface-app: #000000;
+  --surface-app-glow-a: transparent;
+  --surface-app-glow-b: transparent;
+  --surface-header: #05070a;
+  --surface-panel: #080b10;
+  --surface-panel-elevated: #11161f;
+  --surface-card: #0b0e14;
+  --surface-card-flat: #080b10;
+  --surface-input: #000000;
+  --surface-modal: #080b10;
+  --surface-backdrop: rgba(0, 0, 0, 0.84);
+  --surface-drawer: #06080c;
+  --surface-drawer-head: #0c1017;
+  --surface-editor: #000000;
+  --surface-gutter: #06080c;
+  --surface-code: #040609;
+  --surface-control: #121721;
+  --surface-control-flat: #10151f;
+  --surface-hover: rgba(125, 211, 252, 0.16);
+  --surface-active: rgba(56, 189, 248, 0.22);
+  --surface-hero: #0a0e16;
+  --surface-sheen: none;
+
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-muted: #cbd5e1;
+  --text-on-primary: #001018;
+  --text-on-accent: #000000;
+
+  --border-subtle: rgba(255, 255, 255, 0.24);
+  --border-default: rgba(255, 255, 255, 0.42);
+  --border-strong: #38bdf8;
+  --border-focus: #fde047;
+
+  --shadow-sm: none;
+  --shadow-md: 0 0 0 1px rgba(255, 255, 255, 0.25);
+  --shadow-lg: 0 0 0 2px rgba(255, 255, 255, 0.35);
+  --shadow-primary: none;
+
+  --caret-color: #fde047;
+  --editor-selection: rgba(253, 224, 71, 0.3);
+  --editor-line-cur: rgba(255, 255, 255, 0.07);
+}
+
+/* ── قواعد تلوين الكود والفروق وأيقونات الملفات المرتبطة بالثيم ── */
+.t-c { color: var(--syn-comment); font-style: italic; }
+.t-s { color: var(--syn-string); }
+.t-n { color: var(--syn-number); }
+.t-k { color: var(--syn-keyword); }
+.t-b { color: var(--syn-builtin); }
+.t-f { color: var(--syn-fn); }
+.t-pr { color: var(--syn-prop); }
+.t-tg { color: var(--syn-tag); }
+.t-at { color: var(--syn-attr); }
+.t-cl { color: var(--syn-class); }
+.t-rx { color: var(--syn-regex); }
+.t-p { color: var(--syn-punct); }
+.t-se { color: var(--syn-string); text-decoration: underline wavy var(--color-danger); }
+
+.bm { background: var(--match-bg); outline: 1px solid var(--color-accent); border-radius: 2px; }
+.bx { background: var(--match-bad-bg); border-radius: 2px; }
+.sr mark { background: var(--match-bg); color: var(--text-primary); border-radius: 2px; }
+
+.px .del { color: var(--diff-del-fg); }
+.px .add { color: var(--diff-add-fg); }
+.pdiff .dl.add { background: var(--diff-add-bg); color: var(--diff-add-fg); }
+.pdiff .dl.del { background: var(--diff-del-bg); color: var(--diff-del-fg); }
+.pdiff .dl.ctx { color: var(--text-muted); }
+
+.fi-js { color: var(--fi-js); background: var(--fi-js-bg); }
+.fi-html { color: var(--fi-html); background: var(--fi-html-bg); }
+.fi-css { color: var(--fi-css); background: var(--fi-css-bg); }
+.fi-json { color: var(--fi-json); background: var(--fi-json-bg); }
+.fi-md { color: var(--fi-md); background: var(--fi-md-bg); }
+.fi-img { color: var(--fi-img); background: var(--fi-img-bg); }
+.fi-txt { color: var(--fi-txt); background: var(--fi-txt-bg); }
+.fi-d { color: var(--fi-dir); background: var(--fi-dir-bg); }
+
+
+/* ── معاينات الإعدادات: ألوان بطاقات الثيمات ونقاط التمييز (الألوان تُعدَّل هنا فقط) ── */
+.sw-theme[data-th="dark"]     { --sw-bg: #090b10; --sw-fg: #eef1f7; --sw-ac: #4f8df9; }
+.sw-theme[data-th="royal"]    { --sw-bg: #08080a; --sw-fg: #f7f4ee; --sw-ac: #c99746; }
+.sw-theme[data-th="light"]    { --sw-bg: #f4f5f8; --sw-fg: #111827; --sw-ac: #2563eb; }
+.sw-theme[data-th="ocean"]    { --sw-bg: #061117; --sw-fg: #d8f2fb; --sw-ac: #0ea5e9; }
+.sw-theme[data-th="paper"]    { --sw-bg: #f3ede2; --sw-fg: #292218; --sw-ac: #3653b3; }
+.sw-theme[data-th="contrast"] { --sw-bg: #000000; --sw-fg: #ffffff; --sw-ac: #38bdf8; }
+.sw-dot[data-ac="default"] { --dot: linear-gradient(135deg, #4f8df9 50%, #c99746 50%); }
+.sw-dot[data-ac="gold"]    { --dot: #c99746; }
+.sw-dot[data-ac="indigo"]  { --dot: #6366f1; }
+.sw-dot[data-ac="cyan"]    { --dot: #0ea5e9; }
+.sw-dot[data-ac="emerald"] { --dot: #10b981; }
+.sw-dot[data-ac="amber"]   { --dot: #d97706; }
+.sw-dot[data-ac="rose"]    { --dot: #e11d48; }

@@ -1,0 +1,194 @@
+/* ==========================================================================
+   CodePatcher Design System — 5. Responsive (التجاوب وحالات التشغيل)
+   الهاتف الصغير، الهاتف الكبير، الأجهزة اللوحية، وحاسوب IDE الكامل.
+   ========================================================================== */
+
+/* ── حالات التفاعل واللوحة الجانبية ── */
+body.sym.kb { padding-bottom: 0; }
+body.sym.kb .status,
+body.sym.kb .bottom-bar,
+body.sym.kb .nav { display: none; }
+body.sym.kb .symbol-bar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, 36px);
+  grid-auto-columns: max-content;
+}
+
+body.runfs > header,
+body.runfs > .tabbar,
+body.runfs > .nav,
+body.runfs #p-run .runbar,
+body.runfs #p-run .verbar { display: none; }
+body.runfs .panels { order: 2; }
+body.runfs .fab-btn.fs { display: flex; }
+
+body.side-open > header,
+body.side-open > .tabbar,
+body.side-open > .nav,
+body.side-open > .panels,
+body.side-open > .symbol-bar {
+  transform: translateX(var(--dw));
+}
+
+/* ── الهواتف (< 480px): ملاءمة شريط المحرر بالكامل ── */
+@media (max-width: 480px) {
+  .bottom-bar { gap: 3px; padding-inline: 6px; }
+  .bbtn { min-width: 32px; }
+}
+
+/* ── الهواتف الصغيرة جداً (<= 370px) ── */
+@media (max-width: 370px) {
+  :root { --dw: 94vw; }
+  .brand .bt { font-size: 13.5px; }
+  .nav { padding-inline: 4px; gap: 2px; }
+  .nt { font-size: 10px; }
+  .nt svg { width: 17px; height: 17px; }
+  .bottom-bar { gap: 2px; padding-inline: 4px; }
+  .bbtn { width: 32px; min-width: 31px; }
+  .dbody { padding: 10px; }
+  .dtool-grid { gap: 5px; }
+  .dtb { height: 52px; min-height: 52px; font-size: 9.5px; }
+  .explorer-title small { max-width: 170px; }
+  .tr { min-height: 44px; height: 44px; }
+  .form { padding-inline: 10px; }
+  .patch-tools { grid-template-columns: 1fr; }
+  .sheet { border-radius: var(--radius-sheet) var(--radius-sheet) 10px 10px; }
+}
+
+/* ── الأجهزة اللوحية المتوسطة (680px .. 959px) ── */
+@media (min-width: 680px) {
+  body {
+    max-width: 860px;
+    margin-inline: auto;
+    left: 0;
+    right: 0;
+    border-inline: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+  .modal {
+    align-items: center;
+    padding: var(--space-4);
+  }
+  .sheet {
+    max-width: 520px;
+    border-radius: var(--radius-sheet);
+    border-bottom: 1px solid var(--border-default);
+    padding-bottom: var(--space-5);
+  }
+  .sheet::before { display: none; }
+  .drawer {
+    left: max(0px, calc(50vw - 430px));
+    width: min(390px, 85vw);
+  }
+  .dback {
+    left: 0;
+    background: var(--surface-backdrop);
+  }
+  body.side-open > header,
+  body.side-open > .tabbar,
+  body.side-open > .nav,
+  body.side-open > .panels,
+  body.side-open > .symbol-bar {
+    transform: none;
+  }
+  .cp-tool-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cp-tool-row:nth-child(n+3) { border-top: 1px solid var(--border-subtle); }
+  .cp-tool-row:nth-child(2n) { border-inline-start: 1px solid var(--border-subtle); }
+  .cp-tool-row:nth-child(2) { border-top: 0; }
+}
+
+/* ── الحاسوب والشاشات العريضة (>= 960px): استوديو عمل متكامل ── */
+@media (min-width: 960px) {
+  body {
+    max-width: min(1440px, 100vw);
+    border-inline: 1px solid var(--border-subtle);
+  }
+  header { padding-inline: 20px; }
+  .tabbar { padding-inline: 16px; }
+  .drawer {
+    left: max(0px, calc(50vw - 720px));
+    width: 390px;
+  }
+
+  /* شريط تنقل أفقي أنيق للحاسوب */
+  .nav {
+    min-height: 50px;
+    padding: 6px 20px calc(6px + env(safe-area-inset-bottom));
+    justify-content: center;
+    gap: 8px;
+  }
+  .nt {
+    flex: 0 1 150px;
+    height: 38px;
+    flex-direction: row;
+    gap: 8px;
+    font-size: var(--text-sm);
+  }
+  .nt svg { width: 17px; height: 17px; }
+
+  /* الشاشة الرئيسية: تخطيط Bento من عمودين */
+  #p-home { padding: 24px 28px; }
+  .cp-home-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 20px;
+    max-width: 1180px;
+    margin-inline: auto;
+    align-items: start;
+  }
+  .cp-welcome { padding: 24px 24px 22px; }
+  .cp-welcome h2 { font-size: 26px; }
+
+  /* شاشة الباتشات: استوديو منقسم (محرر الباتش بجانب المعاينة والفروق) */
+  #p-patch .form { padding: 20px 24px; }
+  .patch-workspace {
+    display: grid;
+    grid-template-columns: minmax(360px, 0.95fr) minmax(400px, 1.15fr);
+    gap: 20px;
+    max-width: 1280px;
+    margin-inline: auto;
+    align-items: start;
+  }
+  #patchInput { min-height: 290px; }
+
+  /* شاشة الإصدارات والمقارنة: سجل التصحيحات بجانب استوديو المقارنة الحية */
+  .v1-tabs { display: none; }
+  .v1-pane-hidden { display: flex; }
+  .v1-workspace {
+    display: grid;
+    grid-template-columns: minmax(360px, 0.95fr) minmax(420px, 1.15fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* شاشة السجل والإصدارات: عمود قراءة مريح */
+  .log-toolbar, .loglist {
+    width: 100%;
+    max-width: 940px;
+    margin-inline: auto;
+  }
+  #v1Body {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 20px 24px 30px;
+  }
+  .log-toolbar {
+    background: transparent;
+    padding: 16px 24px 8px;
+    border-bottom: 0;
+  }
+  .loglist { padding: 8px 24px 24px; }
+  .bottom-bar { justify-content: center; gap: 8px; padding-inline: 20px; }
+  .bbtn { flex: 0 0 46px; }
+}
+
+/* ── تقليل الحركة (Accessibility) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

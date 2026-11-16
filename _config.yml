@@ -1,0 +1,28 @@
+title: CodePatcher
+description: CodePatcher Pro
+lang: ar
+url: "https://l7adj48.github.io"
+baseurl: "/CodePatcher"
+
+markdown: kramdown
+permalink: pretty
+
+# Keep the existing plain HTML/CSS/JavaScript application intact.
+# Jekyll copies files without front matter unchanged.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - Tools
+  - .github
+  - README.md
+  - DESIGN-SYSTEM.md
+  - "*.gem"
+  - "*.gemspec"
+
+keep_files:
+  - sw.js
+  - manifest.webmanifest
+  - icon-192.png
+  - icon-512.png
+  - icon.svg
