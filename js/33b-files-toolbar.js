@@ -5,17 +5,6 @@
   const needFiles = () => { if (!files.length) { toast('لا ملفات للتصدير', 'err'); return false; } return true; };
   const zipAs = mode => () => { if (needFiles()) exportZip(null, null, defZipName(), mode); };
 
-  function ghManageItems() {
-    const c = ghCfg(), linked = ghRepoOk(c.repo);
-    return [
-      { i: 'folder-open', t: linked ? 'تغيير المستودع' : 'اختيار مستودع', fn: () => githubDialog('pick') },
-      { i: 'plus', t: 'إنشاء مستودع جديد', fn: () => githubDialog('create') },
-      ...(linked ? [{ i: 'external', t: 'فتح المستودع على GitHub', fn: () => window.open('https://github.com/' + c.repo, '_blank', 'noopener') }] : []),
-      { sep: 1 },
-      { i: 'arrow-left', t: 'العودة إلى قائمة GitHub', fn: () => { const b = document.querySelector('[data-menu="github"]'); if (b) tbMenu(b, ghItems()); } }
-    ];
-  }
-
   function ghItems() {
     const raw = ghRaw(), c = ghCfg(), linked = !!raw.token && ghRepoOk(c.repo);
     if (!raw.token) return [
@@ -73,7 +62,7 @@
     const fns = [];
     pop.innerHTML = items.map(it => {
       if (it.sep) return '<div class="psep"></div>';
-      if (it.ghHead) return '<div class="pi-gh-head"><span>' + ic('github', 'brand') + '<b>GitHub</b></span><button type="button" class="pi-gh-manage" data-gh-manage>إدارة المستودع' + ic('chev-left') + '</button></div>';
+      if (it.ghHead) return '<div class="pi-gh-head"><span>' + ic('github', 'brand') + '<b>GitHub</b></span><button type="button" class="pi-gh-manage" data-gh-manage aria-expanded="false">إدارة المستودع' + ic('chev-down') + '</button></div><div class="pi-gh-submenu" data-gh-submenu hidden></div>';
       if (it.h) return '<div class="pi-h" dir="auto">' + esc(it.h) + '</div>';
       fns.push(it.fn);
       return '<div class="pi' + (it.cls ? ' ' + it.cls : '') + '" role="menuitem" tabindex="0" data-n="' + (fns.length - 1) + '">' + ic(it.i, it.i === 'github' ? 'brand' : '') + '<span class="pt"><b>' + esc(it.t) + '</b>' + (it.d ? '<small>' + esc(it.d) + '</small>' : '') + '</span></div>';
@@ -84,9 +73,38 @@
     let top = r.bottom + 6; if (top + h > vh - 8) top = Math.max(8, r.top - h - 6);
     pop.style.left = left + 'px'; pop.style.top = top + 'px';
     pop.style.setProperty('--tb-origin', Math.round(r.left + r.width / 2 - left) + 'px');
+    const manageFns = [];
+    const manageItems = () => {
+      const raw = ghRaw(), cfg = ghCfg(), linked = !!raw.token && ghRepoOk(cfg.repo);
+      return [
+        { i: 'folder-open', t: linked ? 'تغيير المستودع' : 'اختيار مستودع', fn: () => githubDialog('pick') },
+        { i: 'plus', t: 'إنشاء مستودع جديد', fn: () => githubDialog('create') },
+        ...(linked ? [{ i: 'external', t: 'فتح المستودع على GitHub', fn: () => window.open('https://github.com/' + cfg.repo, '_blank', 'noopener') }] : [])
+      ];
+    };
     pop.addEventListener('click', e => {
       const manage = e.target.closest('[data-gh-manage]');
-      if (manage) { tbMenu(manage, ghManageItems()); return; }
+      if (manage) {
+        const sub = pop.querySelector('[data-gh-submenu]');
+        const opening = sub.hidden;
+        sub.hidden = !opening;
+        manage.setAttribute('aria-expanded', String(opening));
+        manage.innerHTML = 'إدارة المستودع' + ic(opening ? 'chev-up' : 'chev-down');
+        if (opening) {
+          manageFns.length = 0;
+          sub.innerHTML = manageItems().map(it => {
+            manageFns.push(it.fn);
+            return '<button type="button" class="pi-gh-subitem" data-gh-action="' + (manageFns.length - 1) + '">' + ic(it.i) + '<span>' + esc(it.t) + '</span></button>';
+          }).join('');
+        }
+        return;
+      }
+      const action = e.target.closest('[data-gh-action]');
+      if (action) {
+        const fn = manageFns[+action.dataset.ghAction];
+        closePop(); if (fn) setTimeout(fn, 60);
+        return;
+      }
       const x = e.target.closest('[data-n]'); if (!x) return;
       const fn = fns[+x.dataset.n]; closePop(); if (fn) setTimeout(fn, 60);
     });
