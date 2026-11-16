@@ -7,28 +7,27 @@
 
   function ghItems() {
     const raw = ghRaw(), c = ghCfg(), linked = !!raw.token && ghRepoOk(c.repo);
+
+    // من دون ربط الحساب: نعرض الربط والاستيراد العام فقط.
     if (!raw.token) return [
-      { h: 'الحساب' },
-      { i: 'github', t: 'ربط حساب GitHub', d: 'للدفع إلى المستودعات الخاصة والعامة', fn: () => githubDialog('connect') },
+      { i: 'github', t: 'ربط حساب GitHub', d: 'للدفع وإدارة المستودعات', fn: () => githubDialog('connect') },
       { sep: 1 },
-      { h: 'استيراد' },
-      { i: 'download-cloud', t: 'استيراد مشروع من GitHub', d: 'المستودعات العامة دون ربط الحساب', fn: () => ghImportDialog() }
+      { i: 'download-cloud', t: 'استيراد مشروع من GitHub', d: 'مستودع عام دون ربط الحساب', fn: () => ghImportDialog() }
     ];
+
+    // إبقاء قائمة GitHub مختصرة وبنفس أسلوب بقية قوائم الشريط.
     return [
-      { h: 'المستودع الحالي' },
-      { h: linked ? c.repo + ' · ' + c.branch + (c.dir ? ' · ' + c.dir : '') : 'لم يُحدَّد مستودع بعد' + (raw.login ? ' · ' + raw.login : '') },
-      { i: 'upload-cloud', t: 'دفع التعديلات إلى GitHub', d: linked ? 'رفع التغييرات في commit واحد' : 'اختر المستودع أولاً', fn: () => githubPush() },
-      ...(linked ? [{ i: 'download-cloud', t: 'سحب آخر تحديثات المستودع', d: 'مراجعة قبل استبدال الملفات', fn: () => ghPull() }] : []),
+      { h: linked
+          ? c.repo + ' · ' + c.branch + (c.dir ? ' · ' + c.dir : '')
+          : 'حساب GitHub متصل' + (raw.login ? ' · ' + raw.login : '') },
+      { i: 'upload-cloud', t: 'دفع التعديلات', d: linked ? 'رفع التغييرات في commit واحد' : 'اختر المستودع أولاً', fn: () => githubPush() },
+      ...(linked ? [{ i: 'download-cloud', t: 'سحب آخر التحديثات', d: 'مراجعة قبل استبدال الملفات', fn: () => ghPull() }] : []),
       { sep: 1 },
-      { h: 'إدارة المستودعات' },
-      { i: linked ? 'folder-open' : 'github', t: linked ? 'تغيير المستودع الحالي' : 'اختيار مستودع', fn: () => githubDialog('pick') },
+      { i: 'folder-open', t: linked ? 'تغيير المستودع' : 'اختيار مستودع', fn: () => githubDialog('pick') },
       { i: 'plus', t: 'إنشاء مستودع جديد', fn: () => githubDialog('create') },
-      ...(linked ? [{ i: 'external', t: 'فتح المستودع على GitHub', d: 'في المتصفح', fn: () => window.open('https://github.com/' + c.repo, '_blank', 'noopener') }] : []),
+      ...(linked ? [{ i: 'external', t: 'فتح المستودع على GitHub', fn: () => window.open('https://github.com/' + c.repo, '_blank', 'noopener') }] : []),
       { sep: 1 },
-      { h: 'استيراد' },
       { i: 'import', t: 'استيراد مشروع من GitHub', d: 'مستودع عام أو خاص', fn: () => ghImportDialog() },
-      { sep: 1 },
-      { h: 'الإعدادات' },
       { i: 'settings', t: 'إعدادات حساب GitHub', fn: () => githubDialog('set') }
     ];
   }
