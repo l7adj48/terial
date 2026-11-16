@@ -1,14 +1,12 @@
-title: CodePatcher
-description: CodePatcher Pro
+title: CodePatcher Terial
+description: CodePatcher Terial
 lang: ar
 url: "https://l7adj48.github.io"
-baseurl: "/CodePatcher"
+baseurl: "/terial"
 
 markdown: kramdown
 permalink: pretty
 
-# Keep the existing plain HTML/CSS/JavaScript application intact.
-# Jekyll copies files without front matter unchanged.
 exclude:
   - Gemfile
   - Gemfile.lock
