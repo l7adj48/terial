@@ -15,16 +15,12 @@
       { h: linked ? c.repo + ' · ' + c.branch + (c.dir ? ' · ' + c.dir : '') : 'لم يُحدَّد مستودع بعد' + (raw.login ? ' · ' + raw.login : '') },
       { i: 'upload-cloud', t: 'دفع التعديلات', d: linked ? 'commit واحد — ويمكن تغيير المستودع قبل الدفع' : 'تختار المستودع أولاً', fn: () => githubPush() },
       ...(linked ? [{ i: 'download-cloud', t: 'سحب آخر تحديثات', d: 'يسأل قبل استبدال أي ملف', fn: () => ghPull() }] : []),
-      { i: 'import', t: 'استيراد مشروع من GitHub', d: 'مستودع عام أو خاص', fn: () => ghImportDialog() },
-      ...(linked ? [
-        { sep: 1 },
-        { i: 'layers', t: 'تحويل المشروع إلى تطبيق (PWA)', d: 'يُدفع المشروع ويصير قابلاً للتثبيت', fn: () => ghConvertApp() },
-        { i: 'monitor', t: 'فتح الصفحة', d: 'موقع المشروع على GitHub Pages', fn: () => ghOpenSite() }
-      ] : []),
       { sep: 1 },
       { i: linked ? 'folder-open' : 'github', t: linked ? 'تغيير المستودع' : 'اختيار مستودع', fn: () => githubDialog('pick') },
       { i: 'plus', t: 'مستودع جديد', fn: () => githubDialog('create') },
       ...(linked ? [{ i: 'external', t: 'فتح المستودع', d: 'في المتصفح', fn: () => window.open('https://github.com/' + c.repo, '_blank', 'noopener') }] : []),
+      { sep: 1 },
+      { i: 'import', t: 'استيراد مشروع من GitHub', d: 'مستودع عام أو خاص', fn: () => ghImportDialog() },
       { sep: 1 },
       { i: 'settings', t: 'إعدادات GitHub', fn: () => githubDialog(linked ? 'set' : 'connect') }
     ];
@@ -87,6 +83,8 @@
   const host = $('dtool');
   host.innerHTML = '<div class="dtool-grid">' + BTNS.map(b =>
     '<button type="button" class="dtb ' + b[3] + '" data-menu="' + b[0] + '" aria-haspopup="menu" aria-expanded="false">' + ic(b[1], b[0] === 'github' ? 'brand' : '') + '<span>' + b[2] + ic('chev-down') + '</span></button>').join('') + '</div>';
+  host.insertAdjacentHTML('beforeend', '<div class="dtool-grid two"><button type="button" class="dtb" data-go="app">' + ic('layers') + '<span>تحويل إلى تطبيق</span></button><button type="button" class="dtb" data-go="site">' + ic('monitor') + '<span>فتح التطبيق</span></button></div>');
+  host.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) { if (g.dataset.go === 'app') ghConvertApp(); else ghOpenSite(); } });
   host.addEventListener('click', e => { const b = e.target.closest('[data-menu]'); if (b) tbMenu(b, MENUS[b.dataset.menu]()); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('pop') && $('pop').classList.contains('tb-pop')) { e.stopPropagation(); closePop(); } }, true);
 })();

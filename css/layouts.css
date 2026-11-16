@@ -968,6 +968,7 @@ body > header, body > .tabbar, body > .nav, body > .panels, body > .symbol-bar {
 
 #dtool { display: flex; flex-direction: column; gap: 7px; flex-shrink: 0; }
 .dtool-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.dtool-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .dtb {
   position: relative;
   height: 56px;
