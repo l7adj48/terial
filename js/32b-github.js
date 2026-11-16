@@ -227,6 +227,40 @@ function ghOpenSite() {
   const c = ghCfg(); if (!ghRepoOk(c.repo)) return githubDialog();
   window.open(jkSiteUrl(c.repo), '_blank', 'noopener');
 }
+/* نافذة GitHub */
+/* تحويل المشروع إلى تطبيق (PWA) ثم دفعه، وفتح صفحة المشروع على GitHub Pages */
+function ghConvertApp() {
+  const c = ghCfg(); if (!c.token || !ghRepoOk(c.repo)) return githubDialog();
+  ghSaveCfg({ token: c.token, repo: c.repo, branch: c.branch, dir: c.dir, jk: true });
+  return githubPush(undefined, 'تحويل المشروع إلى تطبيق (PWA) من CodePatcher');
+}
+function ghOpenSite() {
+  const c = ghCfg(); if (!ghRepoOk(c.repo)) return githubDialog();
+  window.open(jkSiteUrl(c.repo), '_blank', 'noopener');
+}
+/* نافذة GitHub */
+/* تحويل المشروع إلى تطبيق (PWA) ثم دفعه، وفتح صفحة المشروع على GitHub Pages */
+function ghConvertApp() {
+  const c = ghCfg(); if (!c.token || !ghRepoOk(c.repo)) return githubDialog();
+  ghSaveCfg({ token: c.token, repo: c.repo, branch: c.branch, dir: c.dir, jk: true });
+  return githubPush(undefined, 'تحويل المشروع إلى تطبيق (PWA) من CodePatcher');
+}
+function ghOpenSite() {
+  const c = ghCfg(); if (!ghRepoOk(c.repo)) return githubDialog();
+  window.open(jkSiteUrl(c.repo), '_blank', 'noopener');
+}
+/* نافذة GitHub */
+/* تحويل المشروع إلى تطبيق (PWA) ثم دفعه، وفتح صفحة المشروع على GitHub Pages */
+function ghConvertApp() {
+  const c = ghCfg(); if (!c.token || !ghRepoOk(c.repo)) return githubDialog();
+  ghSaveCfg({ token: c.token, repo: c.repo, branch: c.branch, dir: c.dir, jk: true });
+  return githubPush(undefined, 'تحويل المشروع إلى تطبيق (PWA) من CodePatcher');
+}
+function ghOpenSite() {
+  const c = ghCfg(); if (!ghRepoOk(c.repo)) return githubDialog();
+  window.open(jkSiteUrl(c.repo), '_blank', 'noopener');
+}
+/* نافذة GitHub */
 async function githubDialog(view, after) {
   const c = ghCfg(), raw = ghRaw();
   GH_ST.after = after === 'push' ? 'push' : '';
