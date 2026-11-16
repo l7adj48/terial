@@ -69,9 +69,7 @@ function ghMismatch(c) {
 /* بطاقة الوجهة: اسم المستودع كبير وواضح، ثم الحساب والفرع، ثم اسم المشروع الحالي للمقارنة */
 function ghTargetCard(c) {
   const o = String(c.repo).split('/'), pn = ghProjName();
-  return '<div class="slabel">سيُدفع المشروع إلى المستودع</div>' +
-    '<h3 dir="ltr">' + esc(o[1] || c.repo) + '</h3>' +
-    '<div class="slabel" dir="ltr">' + esc(o[0] || '') + ' · branch: ' + esc(c.branch) + (c.dir ? ' · /' + esc(c.dir) : '') + '</div>' +
+  return '<h3 dir="ltr">' + esc(o[1] || c.repo) + ' ' + uiSub(esc(o[0] || '') + ' · ' + esc(c.branch) + (c.dir ? ' · /' + esc(c.dir) : '')) + '</h3>' +
     (pn ? uiNote('المشروع الحالي: <bdi>' + esc(pn) + '</bdi>') : '') +
     (ghMismatch(c) ? uiNote('تنبيه: اسم المستودع لا يشبه اسم المشروع — تأكد أنه المستودع الصحيح') : '');
 }
@@ -80,7 +78,7 @@ function ghAskPush(c, def) {
   return new Promise(res => {
     ui.show(ghHead('') + ghTargetCard(c) +
       uiRow('repos', 'folder-open', 'تغيير المستودع', 'اختر مستودعاً آخر للدفع إليه') +
-      '<div class="slabel">رسالة الـ commit</div><input type="text" id="uiIn" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">' +
+      '<input type="text" id="uiIn" placeholder="رسالة الـ commit" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">' +
       '<div class="srow"><button type="button" class="btn" data-ui="cancel">إلغاء</button><button type="button" class="btn primary" data-ui="ok">دفع</button></div>', act => { if (act === 'repos') ui.close({ change: true, msg: $('uiIn').value }); });
     ui.kind = 'prompt'; ui.resolve = res;
     const i = $('uiIn'); i.value = def || '';
