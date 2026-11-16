@@ -51,7 +51,7 @@
   };
 
   const closeAll = closePop;
-  closePop = function () { closeAll(); document.querySelectorAll('.dtb.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }); };
+  closePop = function () { closeAll(); document.querySelectorAll('.pi-gh-submenu').forEach(el => el.remove()); document.querySelectorAll('.dtb.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }); };
 
   function tbMenu(btn, items) {
     const anchorRect = btn.getBoundingClientRect();
@@ -62,7 +62,7 @@
     const fns = [];
     pop.innerHTML = items.map(it => {
       if (it.sep) return '<div class="psep"></div>';
-      if (it.ghHead) return '<div class="pi-gh-head"><span>' + ic('github', 'brand') + '<b>GitHub</b></span><button type="button" class="pi-gh-manage" data-gh-manage aria-expanded="false">إدارة المستودع' + ic('chev-down') + '</button></div><div class="pi-gh-submenu" data-gh-submenu hidden></div>';
+      if (it.ghHead) return '<div class="pi-gh-head"><span>' + ic('github', 'brand') + '<b>GitHub</b></span><button type="button" class="pi-gh-manage" data-gh-manage aria-expanded="false">إدارة المستودع' + ic('chev-down') + '</button></div>';
       if (it.h) return '<div class="pi-h" dir="auto">' + esc(it.h) + '</div>';
       fns.push(it.fn);
       return '<div class="pi' + (it.cls ? ' ' + it.cls : '') + '" role="menuitem" tabindex="0" data-n="' + (fns.length - 1) + '">' + ic(it.i, it.i === 'github' ? 'brand' : '') + '<span class="pt"><b>' + esc(it.t) + '</b>' + (it.d ? '<small>' + esc(it.d) + '</small>' : '') + '</span></div>';
@@ -74,6 +74,11 @@
     pop.style.left = left + 'px'; pop.style.top = top + 'px';
     pop.style.setProperty('--tb-origin', Math.round(r.left + r.width / 2 - left) + 'px');
     const manageFns = [];
+    const manageSub = document.createElement('div');
+    manageSub.className = 'pi-gh-submenu';
+    manageSub.hidden = true;
+    manageSub.setAttribute('role', 'menu');
+    document.body.appendChild(manageSub);
     const manageItems = () => {
       const raw = ghRaw(), cfg = ghCfg(), linked = !!raw.token && ghRepoOk(cfg.repo);
       return [
@@ -85,28 +90,32 @@
     pop.addEventListener('click', e => {
       const manage = e.target.closest('[data-gh-manage]');
       if (manage) {
-        const sub = pop.querySelector('[data-gh-submenu]');
-        const opening = sub.hidden;
-        sub.hidden = !opening;
+        const opening = manageSub.hidden;
+        manageSub.hidden = !opening;
         manage.setAttribute('aria-expanded', String(opening));
         manage.innerHTML = 'إدارة المستودع' + ic(opening ? 'chev-up' : 'chev-down');
         if (opening) {
           manageFns.length = 0;
-          sub.innerHTML = manageItems().map(it => {
+          manageSub.innerHTML = manageItems().map(it => {
             manageFns.push(it.fn);
             return '<button type="button" class="pi-gh-subitem" data-gh-action="' + (manageFns.length - 1) + '">' + ic(it.i) + '<span>' + esc(it.t) + '</span></button>';
           }).join('');
+          const sr = manageSub.getBoundingClientRect();
+          const pr = pop.getBoundingClientRect();
+          const left = Math.max(8, Math.min(manage.getBoundingClientRect().left + manage.offsetWidth / 2 - sr.width / 2, window.innerWidth - sr.width - 8));
+          manageSub.style.left = left + 'px';
+          manageSub.style.top = Math.max(8, pr.top - sr.height - 8) + 'px';
         }
-        return;
-      }
-      const action = e.target.closest('[data-gh-action]');
-      if (action) {
-        const fn = manageFns[+action.dataset.ghAction];
-        closePop(); if (fn) setTimeout(fn, 60);
         return;
       }
       const x = e.target.closest('[data-n]'); if (!x) return;
       const fn = fns[+x.dataset.n]; closePop(); if (fn) setTimeout(fn, 60);
+    });
+    manageSub.addEventListener('click', e => {
+      const action = e.target.closest('[data-gh-action]');
+      if (!action) return;
+      const fn = manageFns[+action.dataset.ghAction];
+      closePop(); if (fn) setTimeout(fn, 60);
     });
     pop.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.n) { e.preventDefault(); e.target.click(); } });
   }
