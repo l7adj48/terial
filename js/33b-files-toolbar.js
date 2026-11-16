@@ -104,7 +104,7 @@
           const pr = pop.getBoundingClientRect();
           const left = Math.max(8, Math.min(manage.getBoundingClientRect().left + manage.offsetWidth / 2 - sr.width / 2, window.innerWidth - sr.width - 8));
           manageSub.style.left = left + 'px';
-          manageSub.style.top = Math.max(8, pr.top - sr.height - 8) + 'px';
+          manageSub.style.top = (pr.bottom + 6) + 'px';
         }
         return;
       }
