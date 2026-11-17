@@ -81,11 +81,52 @@ function ghPushCard(c) {
     (pn ? uiNote('المشروع الحالي: <bdi>' + esc(pn) + '</bdi>') : '') +
     (ghMismatch(c) ? uiNote('تنبيه: اسم المستودع لا يشبه اسم المشروع — تأكد أنه المستودع الصحيح') : '');
 }
+/* بطاقة المستودع: عنوان «المستودع» واسمه وحسابه وفرعه، وزر «تغيير» يفتح قائمة منسدلة بمستودعاتك */
+function ghRepoCard(c) {
+  const o = String(c.repo).split('/'), pn = ghProjName();
+  return '<div class="mi gh-repo" data-act="repos" role="button" aria-expanded="false"><svg class="ic brand" aria-hidden="true"><use href="#i-github"/></svg>' +
+    '<span class="mi-body"><span class="mi-desc">المستودع</span><span class="mi-title"><bdi dir="ltr">' + esc(o[1] || c.repo) + '</bdi></span>' +
+    '<span class="mi-desc"><bdi dir="ltr">' + esc(o[0] || '') + ' · ' + esc(c.branch) + (c.dir ? ' · /' + esc(c.dir) : '') + '</bdi></span></span>' +
+    '<span class="gh-chg">تغيير<svg class="ic" aria-hidden="true"><use href="#i-chev-down"/></svg></span></div>' +
+    '<div id="ghDrop" class="gh-drop" hidden></div>' +
+    (pn ? uiNote('المشروع الحالي: <bdi>' + esc(pn) + '</bdi>') : '') +
+    (ghMismatch(c) ? uiNote('تنبيه: اسم المستودع لا يشبه اسم المشروع — تأكد أنه المستودع الصحيح') : '');
+}
+/* سلوك القائمة المنسدلة داخل نافذة الدفع: جلب المستودعات مرة واحدة، بحث، واختيار يعيد فتح النافذة بالهدف الجديد */
+function ghPushAct(c) {
+  let list = null, busy = false;
+  const paint = q => { const el = $('ghDList'); if (el) el.innerHTML = ghRepoRows(list, q); };
+  return async (act, el) => {
+    if (act === 'more') return ui.close({ change: true, msg: $('uiIn').value });
+    if (act === 'pick' && list) {
+      const r = list[+el.dataset.i], cur0 = ghCfg();
+      ghSaveCfg({ token: c.token, repo: r.full_name, branch: r.default_branch || 'main', dir: r.full_name === cur0.repo ? cur0.dir : '' });
+      return ui.close({ picked: true, msg: $('uiIn').value });
+    }
+    if (act !== 'repos') return;
+    const d = $('ghDrop'), card = document.querySelector('.gh-repo'); if (!d || !card) return;
+    const open = d.hidden;
+    d.hidden = !open; card.classList.toggle('open', open); card.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (!open) return;
+    const i = $('uiIn'); if (i) i.blur();
+    if (!list) {
+      if (busy) return; busy = true;
+      d.innerHTML = uiEmpty('جارٍ جلب مستودعاتك…');
+      try { list = GH_ST.repos || (GH_ST.repos = await ghListRepos(c)); }
+      catch (e) { busy = false; if ($('ghDrop')) d.innerHTML = uiEmpty('تعذّر جلب المستودعات: ' + ghErrText(e)); return; }
+      busy = false; if (!$('ghDrop')) return;
+      d.innerHTML = '<input type="text" id="ghDQ"' + GH_ATTR + ' placeholder="ابحث في مستودعاتك…">' + uiScroll('<div id="ghDList"></div>', 'md') +
+        '<div class="slabel"><a data-act="more" class="gh-more">كل الخيارات: بحث موسّع أو مستودع جديد</a></div>';
+      $('ghDQ').addEventListener('input', e => paint(e.target.value)); paint('');
+    }
+    d.scrollIntoView({ block: 'nearest' });
+  };
+}
 function ghAskPush(c, def) {
   return new Promise(res => {
-    ui.show('<div class="gh-tight">' + ghHead('') + ghPushCard(c) +
+    ui.show('<div class="gh-tight">' + ghHead('') + ghRepoCard(c) +
       '<input type="text" id="uiIn" placeholder="رسالة الـ commit" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">' +
-      '<div class="srow"><button type="button" class="btn" data-ui="cancel">إلغاء</button><button type="button" class="btn primary" data-ui="ok">دفع</button></div></div>', act => { if (act === 'repos') ui.close({ change: true, msg: $('uiIn').value }); });
+      '<div class="srow"><button type="button" class="btn" data-ui="cancel">إلغاء</button><button type="button" class="btn primary" data-ui="ok">دفع</button></div></div>', ghPushAct(c));
     ui.kind = 'prompt'; ui.resolve = res;
     const i = $('uiIn'); i.value = def || '';
     i.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); ui.close(i.value); } });
@@ -100,7 +141,7 @@ async function githubPush(msg, def) {
   if (!files.length) return toast('لا ملفات للدفع', 'err');
   if (msg === undefined) {
     msg = await ghAskPush(c, def || ghDefMsg()); if (msg == null) return;
-    if (typeof msg === 'object') { GH_ST.pushMsg = msg.msg; return void setTimeout(() => githubDialog('pick', 'push'), 120); }
+    if (typeof msg === 'object') { if (msg.picked) return void setTimeout(() => githubPush(undefined, msg.msg), 120); GH_ST.pushMsg = msg.msg; return void setTimeout(() => githubDialog('pick', 'push'), 120); }
   }
   msg = String(msg).trim() || ghDefMsg();
   const R = '/repos/' + c.repo, say = t => toast(t, ''), brp = encodeURIComponent(c.branch).replace(/%2F/g, '/');

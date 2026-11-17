@@ -275,6 +275,14 @@ html .modal.open .sheet { margin-bottom: var(--kb-pad, 0px); max-height: min(cal
 .srow { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
 .srow > * { flex: 1; min-width: 0; }
 .srow-mt { margin-top: 6px; }
+.gh-repo { cursor: pointer; }
+.gh-repo.open { border-color: var(--border-focus); }
+.gh-chg { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; padding: 6px 11px; border: 1px solid var(--border-default); border-radius: var(--radius-pill); background: var(--surface-control); color: var(--text-primary); font-size: var(--text-sm); font-weight: 600; }
+.gh-chg svg { width: 12px; height: 12px; transition: transform var(--motion-fast); }
+.gh-repo.open .gh-chg svg { transform: rotate(180deg); }
+.gh-drop { display: flex; flex-direction: column; gap: 8px; }
+.gh-drop[hidden] { display: none; }
+.gh-more { color: var(--color-primary-hover); cursor: pointer; font-size: var(--text-sm); }
 .gh-tight { display: flex; flex-direction: column; gap: 5px; }
 .gh-tight .slabel { line-height: 1.4; }
 .gh-tight h3 { line-height: 1.3; }
