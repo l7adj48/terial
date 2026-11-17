@@ -74,10 +74,16 @@ function ghTargetCard(c) {
     (ghMismatch(c) ? uiNote('تنبيه: اسم المستودع لا يشبه اسم المشروع — تأكد أنه المستودع الصحيح') : '');
 }
 /* نافذة رسالة الـ commit مع إظهار المستودع الذي سيُدفع إليه. تعيد النص، أو null عند الإلغاء، أو { change, msg } عند طلب تغيير المستودع */
+/* بطاقة واحدة مضغوطة: المستودع والفرع، وبالضغط عليها يُغيَّر المستودع */
+function ghPushCard(c) {
+  const o = String(c.repo).split('/'), pn = ghProjName();
+  return uiRow('repos', 'folder-open', '<bdi dir="ltr">' + esc(o[1] || c.repo) + '</bdi>', '<bdi dir="ltr">' + esc(o[0] || '') + ' · ' + esc(c.branch) + (c.dir ? ' · /' + esc(c.dir) : '') + '</bdi> — اضغط للتغيير') +
+    (pn ? uiNote('المشروع الحالي: <bdi>' + esc(pn) + '</bdi>') : '') +
+    (ghMismatch(c) ? uiNote('تنبيه: اسم المستودع لا يشبه اسم المشروع — تأكد أنه المستودع الصحيح') : '');
+}
 function ghAskPush(c, def) {
   return new Promise(res => {
-    ui.show('<div class="gh-tight">' + ghHead('') + ghTargetCard(c) +
-      uiRow('repos', 'folder-open', 'تغيير المستودع', 'اختر مستودعاً آخر للدفع إليه') +
+    ui.show('<div class="gh-tight">' + ghHead('') + ghPushCard(c) +
       '<input type="text" id="uiIn" placeholder="رسالة الـ commit" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">' +
       '<div class="srow"><button type="button" class="btn" data-ui="cancel">إلغاء</button><button type="button" class="btn primary" data-ui="ok">دفع</button></div></div>', act => { if (act === 'repos') ui.close({ change: true, msg: $('uiIn').value }); });
     ui.kind = 'prompt'; ui.resolve = res;
